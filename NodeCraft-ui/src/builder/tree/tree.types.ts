@@ -1,3 +1,5 @@
+import type { BuilderError } from "builder/errors/error.types";
+
 export type ComponentType =
   | "section"
   | "heading"
@@ -15,3 +17,7 @@ export interface ComponentNode {
 export interface PageSchema {
   root: ComponentNode;
 }
+
+export type TreeOperationResult<T = unknown> =
+  | { success: true; value: T }
+  | { success: false; error: BuilderError };
