@@ -1,18 +1,37 @@
+import { useRef } from "react";
 import type { ComponentNode } from "../tree/tree.types";
 import { componentRegistry } from "./componentRegistry";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { selectSelectedNodeId } from "../store/builderSelectors";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { builderActions } from "../store/builderActions";
 
 export function Renderer({ node }: { node: ComponentNode }) {
   const Component = componentRegistry[node.type];
+
+  const dispatch = useAppDispatch();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const isSelected = useAppSelector(selectSelectedNodeId) === node.id;
+
+  const selectNode: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    event?.stopPropagation();
+    dispatch(builderActions.selectNode(node.id));
+  };
 
   if (!Component) {
     return <div>Unknown component: {node.type}</div>;
   }
 
   return (
-    <Component node={node}>
-      {node.children.map((child) => (
-        <Renderer key={child.id} node={child} />
-      ))}
-    </Component>
+    <div ref={ref} className="relative" onClick={selectNode}>
+      <Component node={node}>
+        {node.children.map((child) => (
+          <Renderer key={child.id} node={child} />
+        ))}
+      </Component>
+      {isSelected && (
+        <div className="absolute inset-0 border-2 border-blue-500 pointer-events-none" />
+      )}
+    </div>
   );
 }
