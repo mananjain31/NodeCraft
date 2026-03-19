@@ -1,5 +1,5 @@
 import type { PageSchema } from "builder/tree/tree.types";
-import type { HistoryState } from "./history.types";
+import type { HistoryState } from "../history/history.types";
 
 export interface BuilderState {
   history: HistoryState<PageSchema>;

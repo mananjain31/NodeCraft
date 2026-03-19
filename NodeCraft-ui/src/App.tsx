@@ -1,34 +1,34 @@
-import { useState } from "react";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { Canvas } from "@/builder/renderer/Canvas";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { builderActions } from "@/builder/store/builderActions";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const dispatch = useAppDispatch();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        {/* <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a> */}
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="flex flex-col gap-4 p-6">
+      <div className="flex gap-4">
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => dispatch(builderActions.addNode("root", "section"))}
+        >
+          Add Section
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => dispatch(builderActions.undo())}
+        >
+          Undo
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => dispatch(builderActions.redo())}
+        >
+          Redo
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <Canvas />
+    </div>
   );
 }
-
-export default App;

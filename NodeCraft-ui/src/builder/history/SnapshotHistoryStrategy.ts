@@ -1,11 +1,15 @@
-import type { HistoryState } from "builder/store/history.types";
+import type { HistoryState } from "builder/history/history.types";
 import type { HistoryStrategy } from "./HistoryStrategy";
 
 export class SnapshotHistoryStrategy<T> implements HistoryStrategy<T> {
   constructor(private MAX_HISTORY = 50) {}
 
-  record(history: HistoryState<T>, newPresent: T): HistoryState<T> {
-    let newPast = [...history.past, history.present];
+  record(
+    history: HistoryState<T>,
+    presentBefore: T,
+    newPresent: T,
+  ): HistoryState<T> {
+    let newPast = [...history.past, presentBefore];
 
     if (newPast.length > this.MAX_HISTORY) {
       newPast = newPast.slice(1);
