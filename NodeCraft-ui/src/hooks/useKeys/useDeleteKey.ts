@@ -1,16 +1,9 @@
 import { useEffect } from "react";
-import { useAppDispatch } from "./useAppDispatch";
-import { useAppSelector } from "./useAppSelector";
+import { useAppDispatch } from "../useAppDispatch";
+import { useAppSelector } from "../useAppSelector";
 import { selectSelectedNodeId } from "@/builder/store/builderSelectors";
 import { builderActions } from "@/builder/store/builderActions";
-
-function isTypingInInput(target: EventTarget | null): boolean {
-  if (!(target instanceof HTMLElement)) return false;
-
-  const tag = target.tagName.toLowerCase();
-
-  return tag === "input" || tag === "textarea" || target.isContentEditable;
-}
+import { isTypingInInput } from "./isTypingInput";
 
 export function useDeleteKey() {
   const dispatch = useAppDispatch();

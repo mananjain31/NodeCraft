@@ -3,5 +3,6 @@ import type { HistoryState } from "../history/history.types";
 
 export interface BuilderState {
   history: HistoryState<PageSchema>;
-  selectedNodeId: string | null;
+  selectedNodeId?: string | null;
+  hoveredNodeId?: string | null;
 }

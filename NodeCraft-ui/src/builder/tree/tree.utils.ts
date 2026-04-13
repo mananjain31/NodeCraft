@@ -45,6 +45,7 @@ export function insertNode(
   if (index !== undefined && index >= 0 && index <= parentNode.children.length)
     parentNode.children.splice(index, 0, newNode);
   else parentNode.children.push(newNode);
+  newNode.parentId = parentNode.id;
   return { success: true, value: newNode };
 }
 
@@ -76,4 +77,30 @@ export function removeNodeById(
   );
   const [removedNode] = parentNode.children.splice(nodeIndex, 1);
   return { success: true, value: removedNode };
+}
+
+export function updateNodeProps(
+  root: ComponentNode,
+  nodeId: string,
+  newProps: Record<string, unknown>,
+): TreeOperationResult<ComponentNode> {
+  const node = findNodeById(root, nodeId);
+
+  if (!node) {
+    return {
+      success: false,
+      error: {
+        code: "NODE_NOT_FOUND",
+        message: `Node ${nodeId} not found`,
+        meta: { nodeId },
+      },
+    };
+  }
+
+  node.props = {
+    ...node.props,
+    ...newProps,
+  };
+
+  return { success: true, value: node };
 }

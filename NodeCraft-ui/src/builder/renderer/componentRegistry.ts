@@ -1,5 +1,6 @@
 import type { ComponentType } from "../tree/tree.types";
 import { Heading } from "./components/Heading";
+import { Paragraph } from "./components/Paragraph";
 import { Section } from "./components/Section";
 import type { RendererComponent } from "./types";
 
@@ -13,7 +14,7 @@ export const componentRegistry: Partial<
 > = {
   section: Section,
   heading: Heading,
-  //   paragraph: Paragraph,
+  paragraph: Paragraph,
   //   button: Button,
   //   image: Image,
 };

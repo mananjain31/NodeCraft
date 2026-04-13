@@ -6,7 +6,12 @@ import type { ComponentNode } from "../tree/tree.types";
 import type { TreeOperationResult } from "../tree/tree.types";
 import cloneDeep from "lodash/cloneDeep";
 
-import { insertNode, removeNodeById, findNodeById } from "../tree/tree.utils";
+import {
+  insertNode,
+  removeNodeById,
+  findNodeById,
+  updateNodeProps,
+} from "../tree/tree.utils";
 
 import { historyStrategy, errorDispatcher } from "../config/builderConfig";
 
@@ -24,6 +29,7 @@ const initialState: BuilderState = {
     future: [],
   },
   selectedNodeId: null,
+  hoveredNodeId: null,
 };
 
 function enforceSelectionInvariant(state: BuilderState) {
@@ -67,6 +73,7 @@ export const builderSlice = createSlice({
       action: PayloadAction<{
         parentId: string;
         newNode: ComponentNode;
+        index?: number;
       }>,
     ) => {
       applyStructuralOperation(state, () =>
@@ -74,6 +81,7 @@ export const builderSlice = createSlice({
           state.history.present.root,
           action.payload.parentId,
           action.payload.newNode,
+          action.payload.index,
         ),
       );
     },
@@ -81,6 +89,22 @@ export const builderSlice = createSlice({
     removeNode: (state, action: PayloadAction<{ nodeId: string }>) => {
       applyStructuralOperation(state, () =>
         removeNodeById(state.history.present.root, action.payload.nodeId),
+      );
+    },
+
+    updateNodeProps: (
+      state,
+      action: PayloadAction<{
+        nodeId: string;
+        props: Record<string, unknown>;
+      }>,
+    ) => {
+      applyStructuralOperation(state, () =>
+        updateNodeProps(
+          state.history.present.root,
+          action.payload.nodeId,
+          action.payload.props,
+        ),
       );
     },
 
@@ -96,6 +120,13 @@ export const builderSlice = createSlice({
 
     selectNode: (state, action: PayloadAction<string | null>) => {
       state.selectedNodeId = action.payload;
+    },
+
+    setHoveredNode: (
+      state,
+      action: PayloadAction<string | null | undefined>,
+    ) => {
+      state.hoveredNodeId = action.payload;
     },
   },
 });

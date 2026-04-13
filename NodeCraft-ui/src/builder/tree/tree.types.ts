@@ -12,6 +12,7 @@ export interface ComponentNode {
   type: ComponentType;
   props: Record<string, unknown>;
   children: ComponentNode[];
+  parentId?: string;
 }
 
 export interface PageSchema {
